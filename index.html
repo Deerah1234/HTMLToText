@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HTML Input Example</title>
+    </head>
+    <body>
+        <h1>HTML Input Example</h1>
+        <form action="/store-html" method="POST">
+            <label for="htmlInput">Enter HTML Code:</label><br />
+            <textarea id="htmlInput" name="html" rows="10" cols="50"></textarea
+            ><br />
+            <input type="submit" value="Submit" />
+        </form>
+
+        <h2>Stored HTML:</h2>
+        <div id="storedHtml"></div>
+
+        <script>
+            // JavaScript to fetch the stored HTML and display it
+            fetch("/get-html")
+                .then((response) => response.text())
+                .then(
+                    (html) =>
+                        (document.getElementById("storedHtml").innerHTML = html)
+                )
+                .catch((error) => console.error(error));
+        </script>
+    </body>
+</html>
