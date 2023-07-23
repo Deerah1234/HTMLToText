@@ -3,29 +3,67 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>HTML Input Example</title>
+        <title>HTML to Text Converter</title>
     </head>
     <body>
-        <h1>HTML Input Example</h1>
-        <form action="/store-html" method="POST">
-            <label for="htmlInput">Enter HTML Code:</label><br />
-            <textarea id="htmlInput" name="html" rows="10" cols="50"></textarea
-            ><br />
-            <input type="submit" value="Submit" />
-        </form>
-
-        <h2>Stored HTML:</h2>
-        <div id="storedHtml"></div>
+        <h1>HTML to Text Converter</h1>
+        <textarea
+            id="htmlInput"
+            rows="10"
+            cols="50"
+            placeholder="Paste HTML code here"
+        ></textarea
+        ><br />
+        <button onclick="convertToText()">Convert</button>
+        <button onclick="resetInput()">Clear</button>
+        <div id="textOutput"></div>
+        <div id="iframeCode"></div>
+        <!-- Display the iframe code link here -->
 
         <script>
-            // JavaScript to fetch the stored HTML and display it
-            fetch("/get-html")
-                .then((response) => response.text())
-                .then(
-                    (html) =>
-                        (document.getElementById("storedHtml").innerHTML = html)
-                )
-                .catch((error) => console.error(error));
+            function convertToText() {
+                const htmlInput = document.getElementById("htmlInput").value;
+                const textOutput = document.getElementById("textOutput");
+                textOutput.innerHTML = htmlInput;
+
+                // Create a temporary element to convert HTML to text
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = htmlInput;
+                textOutput.textContent = tempDiv.innerText;
+
+                // Send the converted HTML content to the backend
+                fetch("/convert", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: "html_content=" + encodeURIComponent(htmlInput),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Generate the iframe code with the short link
+                        const iframeCode =
+                            '<iframe src="' +
+                            data.short_link +
+                            '" frameborder="0" width="100%" height="400"></iframe>';
+
+                        // Display the iframe code as a link for the user to copy
+                        const iframeCodeDiv =
+                            document.getElementById("iframeCode");
+                        iframeCodeDiv.innerHTML =
+                            'Copy and paste this iframe code on your website: <br><textarea rows="3" cols="80">' +
+                            iframeCode +
+                            "</textarea>";
+                    });
+            }
+
+            function resetInput() {
+                const htmlInput = document.getElementById("htmlInput");
+                const textOutput = document.getElementById("textOutput");
+                htmlInput.value = "";
+                textOutput.innerHTML = "";
+                document.getElementById("iframeCode").innerHTML = "";
+            }
         </script>
     </body>
 </html>
