@@ -1,77 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>HTML to Text Converter</title>
+        <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <h1>HTML to Text Converter</h1>
-        <textarea
-            id="htmlInput"
-            rows="10"
-            cols="50"
-            placeholder="Paste HTML code here"
-        ></textarea
-        ><br />
-        <button onclick="convertToText()">Convert</button>
-        <button onclick="resetInput()">Clear</button>
-        <div id="markdownOutput"></div>
-        <div id="shortLink"></div>
-        <!-- Display the short link here -->
+        <nav>
+            <h1>HTML to Text Converter</h1>
+        </nav>
+        <main>
+            <div class="box">
+                <textarea
+                    id="htmlInput"
+                    rows="10"
+                    placeholder="Paste HTML code here"
+                ></textarea>
+                <div class="button-container">
+                    <button onclick="convertToText()" class="convert-btn">
+                        Convert
+                    </button>
+                    <button onclick="resetInput()" class="clear-btn">
+                        Clear
+                    </button>
+                </div>
+            </div>
+            <div class="box output-box">
+                <div id="textOutput" class="output"></div>
+            </div>
+        </main>
 
-        <script>
-            function convertToText() {
-                const htmlInput = document.getElementById("htmlInput").value;
-                const markdownOutput =
-                    document.getElementById("markdownOutput");
-                markdownOutput.innerHTML = "";
-
-                // Send the HTML content to the backend
-                fetch("/convert", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: "html_content=" + encodeURIComponent(htmlInput),
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        // Generate the Markdown content with the short link
-                        const markdownContent = htmlToMarkdown(htmlInput);
-
-                        // Display the converted text with preserved color
-                        markdownOutput.innerHTML = markdownContent;
-
-                        // Display the short link for the user to copy
-                        const shortLinkDiv =
-                            document.getElementById("shortLink");
-                        const shortLink =
-                            window.location.href + data.short_link;
-                        shortLinkDiv.innerHTML =
-                            'Short Link: <a href="' +
-                            shortLink +
-                            '" target="_blank">' +
-                            shortLink +
-                            "</a>";
-                    });
-            }
-
-            function htmlToMarkdown(html) {
-                // Replace the HTML tags with Markdown equivalents (You can use a library like turndown.js for more accuracy)
-                let markdown = html;
-                markdown = markdown.replace(/<[^>]+>/g, ""); // Remove all HTML tags
-                return markdown;
-            }
-
-            function resetInput() {
-                const htmlInput = document.getElementById("htmlInput");
-                const markdownOutput =
-                    document.getElementById("markdownOutput");
-                htmlInput.value = "";
-                markdownOutput.innerHTML = "";
-                document.getElementById("shortLink").innerHTML = "";
-            }
-        </script>
+        <script src="app.js"></script>
     </body>
 </html>

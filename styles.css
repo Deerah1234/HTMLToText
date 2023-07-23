@@ -1,0 +1,127 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Fira Code", monospace;
+    background-color: #f0f0f0;
+}
+
+nav {
+    background-color: #172b4d;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+nav h1 {
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #173b66, #000);
+}
+
+.box {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+textarea {
+    width: 100%;
+    resize: vertical;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #000;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+button {
+    cursor: pointer;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+    background-color: #007bff;
+}
+
+.convert-btn {
+    background-color: #007bff;
+    margin-right: 10px;
+}
+
+.clear-btn {
+    background-color: #dc3545;
+}
+
+.output-box {
+    margin-top: 40px;
+}
+
+.output {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+main {
+    animation: fadeIn 1s;
+}
+
+.box,
+.output-box,
+textarea,
+button,
+.output {
+    animation: slideDown 1s;
+}
