@@ -23,6 +23,19 @@ app.post("/convert", (req, res) => {
     res.json({ short_link: shortLink });
 });
 
+app.get("/:shortLink", (req, res) => {
+    const shortLink = req.params.shortLink;
+    const convertedHtml = htmlData[shortLink];
+
+    if (convertedHtml) {
+        // Send the converted HTML content as the response
+        res.send(convertedHtml);
+    } else {
+        // Short link not found, return a 404 error
+        res.sendStatus(404);
+    }
+});
+
 const port = 3000;
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

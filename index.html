@@ -16,22 +16,18 @@
         ><br />
         <button onclick="convertToText()">Convert</button>
         <button onclick="resetInput()">Clear</button>
-        <div id="textOutput"></div>
-        <div id="iframeCode"></div>
-        <!-- Display the iframe code link here -->
+        <div id="markdownOutput"></div>
+        <div id="shortLink"></div>
+        <!-- Display the short link here -->
 
         <script>
             function convertToText() {
                 const htmlInput = document.getElementById("htmlInput").value;
-                const textOutput = document.getElementById("textOutput");
-                textOutput.innerHTML = htmlInput;
+                const markdownOutput =
+                    document.getElementById("markdownOutput");
+                markdownOutput.innerHTML = "";
 
-                // Create a temporary element to convert HTML to text
-                const tempDiv = document.createElement("div");
-                tempDiv.innerHTML = htmlInput;
-                textOutput.textContent = tempDiv.innerText;
-
-                // Send the converted HTML content to the backend
+                // Send the HTML content to the backend
                 fetch("/convert", {
                     method: "POST",
                     headers: {
@@ -41,28 +37,40 @@
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        // Generate the iframe code with the short link
-                        const iframeCode =
-                            '<iframe src="' +
-                            data.short_link +
-                            '" frameborder="0" width="100%" height="400"></iframe>';
+                        // Generate the Markdown content with the short link
+                        const markdownContent = htmlToMarkdown(htmlInput);
 
-                        // Display the iframe code link for the user to copy
-                        const iframeCodeDiv =
-                            document.getElementById("iframeCode");
-                        iframeCodeDiv.innerHTML =
-                            'Copy and paste this iframe code on your website:<br><textarea rows="3" cols="80">' +
-                            iframeCode +
-                            "</textarea>";
+                        // Display the converted text with preserved color
+                        markdownOutput.innerHTML = markdownContent;
+
+                        // Display the short link for the user to copy
+                        const shortLinkDiv =
+                            document.getElementById("shortLink");
+                        const shortLink =
+                            window.location.href + data.short_link;
+                        shortLinkDiv.innerHTML =
+                            'Short Link: <a href="' +
+                            shortLink +
+                            '" target="_blank">' +
+                            shortLink +
+                            "</a>";
                     });
+            }
+
+            function htmlToMarkdown(html) {
+                // Replace the HTML tags with Markdown equivalents (You can use a library like turndown.js for more accuracy)
+                let markdown = html;
+                markdown = markdown.replace(/<[^>]+>/g, ""); // Remove all HTML tags
+                return markdown;
             }
 
             function resetInput() {
                 const htmlInput = document.getElementById("htmlInput");
-                const textOutput = document.getElementById("textOutput");
+                const markdownOutput =
+                    document.getElementById("markdownOutput");
                 htmlInput.value = "";
-                textOutput.innerHTML = "";
-                document.getElementById("iframeCode").innerHTML = "";
+                markdownOutput.innerHTML = "";
+                document.getElementById("shortLink").innerHTML = "";
             }
         </script>
     </body>
